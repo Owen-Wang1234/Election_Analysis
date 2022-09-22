@@ -51,41 +51,53 @@ with open(file_to_load) as election_data:
         # Add a vote to the candidate's count.
         candidate_votes[candidate_name] += 1
 
-# Calculate the percentage of votes each candidate won.
-# Iterate through the candidate list.
-for candidate_name in candidate_votes:
+# Open the output file and prepare to write in the results.
+with open(file_to_save, "w") as txt_file:
 
-    # Get the vote count of the candidate.
-    votes = candidate_votes[candidate_name]
+    # Print the final vote count.
+    election_results = (
+        f"Election Results\n"
+        f"-------------------------\n"
+        f"Total Votes: {total_votes:,}\n"
+        f"-------------------------\n")
+    print(election_results, end="")
 
-    # Calculate the percentage of votes.
-    vote_percentage = float(votes) / float(total_votes) * 100
+    # Write the final vote count into the output file.
+    txt_file.write(election_results)
 
-    # Print the candidate name and the percentage of votes.
-    print(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+    # Now iterate through the candidate list.
+    for candidate_name in candidate_votes:
 
-    # Determine the winner of the election based on popular vote.
-    # See if the votes are greater than the winning count.
-    if (votes > winning_count) and (vote_percentage > winning_percentage):
+        # Get the vote count of the candidate.
+        votes = candidate_votes[candidate_name]
 
-        # If true, then set the winning candidate, count, and percentage.
-        winning_candidate = candidate_name
-        winning_count = votes
-        winning_percentage = vote_percentage
+        # Calculate the percentage of votes.
+        vote_percentage = float(votes) / float(total_votes) * 100
 
-# Print the winning summary.
-winning_candidate_summary = (
-    f"-------------------------\n"
-    f"Winner: {winning_candidate}\n"
-    f"Winning Vote Count: {winning_count:,}\n"
-    f"Winning Percentage: {winning_percentage:.1f}%\n"
-    f"-------------------------\n")
-print(winning_candidate_summary)
+        # Print the candidate result.
+        candidate_results = (f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+        print(candidate_results)
 
-# Use the open statement to open the file as a text file.
-#with open(file_to_save, "w") as txt_file:
+        # Write the candidate result into the output file.
+        txt_file.write(candidate_results)
 
-    # Write three counties to the file.
-#    txt_file.write("Counties in the Election\n")
-#    txt_file.write("-------------------------\n")
-#    txt_file.write("Arapahoe\nDenver\nJefferson")
+        # Determine the winner of the election based on popular vote.
+        # See if the votes are greater than the winning count.
+        if (votes > winning_count) and (vote_percentage > winning_percentage):
+
+            # If true, then set the winning candidate, count, and percentage.
+            winning_candidate = candidate_name
+            winning_count = votes
+            winning_percentage = vote_percentage
+
+    # Print the winning summary.
+    winning_candidate_summary = (
+        f"-------------------------\n"
+        f"Winner: {winning_candidate}\n"
+        f"Winning Vote Count: {winning_count:,}\n"
+        f"Winning Percentage: {winning_percentage:.1f}%\n"
+        f"-------------------------\n")
+    print(winning_candidate_summary)
+
+    # Write the winning summary into the output file.
+    txt_file.write(winning_candidate_summary)
